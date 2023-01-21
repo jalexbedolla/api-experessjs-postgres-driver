@@ -9,6 +9,7 @@ app.use(express.urlencoded({extended: false})) // permitimos recibir datos del f
 // utilizamos las rutas... this is a middleware too
 app.use(router)
 
+// levantamos el servidor con el metodo listen
 app.listen(3000, (error)=>{
   error ? console.log(error) : console.log('Server running');
 })

@@ -1,10 +1,11 @@
 const { Router } = require('express')
 const router = Router()
+const { controllerget, controllerpost} = require('../controllers')
 
 
-router.get('/users', function (req, res) { 
-  console.log(req);
-  res.json({message: 'hola soy la puta respuesta'})
-})
+// esto se le llama controlador
+router.get('/products/:productid', controllerget) // params
+router.post('/products', controllerpost)
+
 
 module.exports = router
