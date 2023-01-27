@@ -26,9 +26,13 @@ const crearMascota = (req, res) => { // este es de tipo 'post'
 const obtenerTodasMascotas = async (req, res) => {
   try {
     const dbResponse = await connect.query('SELECT * FROM mascotas')
-    console.log(dbResponse);
+    res.status(200).send({
+      data: dbResponse.rows
+    })
   } catch (error) {
-    console.log(error);
+    res.status(404).send({
+      error 
+    })
   }
 }
 
