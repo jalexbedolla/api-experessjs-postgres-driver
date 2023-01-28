@@ -9,17 +9,24 @@ const connect = require('../database')
 //controladores de mascotas 'aka peticiones'
 
 /* crearmascota */
-const crearMascota = (req, res) => { // este es de tipo 'post'
-  console.log('crear mascota');
-
-  const nombre = req.body.nombre
-  const edad = req.body.edad
-  console.log(`el nombre de la mascota es ${nombre} y tiene ${edad} años`);
-
-  /* pasamos los codigos */
-  res.status(201).send({
-    message: 'tu mascota fue creada'
-  })
+const crearMascota = async (req, res) => { // este es de tipo 'post'
+  const { nombre, tipo, raza, edad, propietario_id } = req.body
+    try {
+      const dbResponse = await connect.query('INSERT INTO mascotas (nombre, tipo, raza, edad, propietario_id) VALUES($1, $2, $3, $4, $5)', [nombre, tipo, raza, edad, propietario_id])
+        if(dbResponse.rowCount > 0){
+          res.status(201).send({
+            message: 'Mascota Creada'
+          })
+        } else{
+          res.status(409).send({
+            message: 'valio vrga'
+          })
+        }       
+    } catch (error) {
+      res.status(409).send({
+        error
+      })
+    }
 }
 
 /* obtenerTodasMascotas */ // este es de tipo 'get'
@@ -37,8 +44,24 @@ const obtenerTodasMascotas = async (req, res) => {
 }
 
 /* obtenerMascota */
-const obtenerMascota = (req, res) => {
-  console.log('obtener una Mascota');
+const obtenerMascota = async (req, res) => {
+  const id = req.params.idMascota
+  console.log(id);
+  try {
+    const dbResponse = await connect.query('SELECT * FROM mascotas WHERE  id_mascota =$1', [id])
+      if(dbResponse.rowCount > 0) { res.status(200).send({
+        data: dbResponse.rows
+      })
+    } else {
+        res.status(404).send({
+          message: 'mascota no encontrada'
+        })
+    }
+  } catch (error) {
+    res.status(404).send({
+      error
+    })
+  }
 }
 /* modificarMascota */
 const modificarMascota = (req, res) => {
